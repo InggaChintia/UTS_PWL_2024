@@ -45,9 +45,9 @@
                             @enderror
 
                             <!-- Menampilkan foto profil yang sudah ada -->
-                            @if ($user->photo)
+                            @if ($user->avatar)
                                 <div class="mt-3">
-                                    <img src="{{ asset($user->photo) }}" alt="Foto Profil" class="img-thumbnail" width="150">
+                                    <img src="{{ asset($user->avatar) }}" alt="Foto Profil" class="img-thumbnail" width="150">
                                     <p>Foto Profil Saat Ini</p>
                                 </div>
                             @else

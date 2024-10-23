@@ -21,7 +21,7 @@ class ProfileController extends Controller
         }
 
         $breadcrumb = (object) [
-            'title' => 'Dashboard',
+            'title' => 'Profile',
             'list' => [
                 'Home',
                 (object) ['url' => route('profile.profil'), 'label' => 'Profile'],

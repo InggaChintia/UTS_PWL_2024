@@ -3,8 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" arialabel="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
@@ -22,8 +21,8 @@
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data stok</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data User</h5>
+                    <button type="button" class="close" data-dismiss="modal" arialabel="Close"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -33,7 +32,7 @@
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">Nama Supplier:</th>
+                            <th class="text-right col-3">Nama Supplier :</th>
                             <td class="col-9">{{ $stok->supplier->supplier_nama }}</td>
                         </tr>
                         <tr>
@@ -45,11 +44,11 @@
                             <td class="col-9">{{ $stok->user->username }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Stok Tanggal :</th>
+                            <th class="text-right col-3">Tanggal Stok :</th>
                             <td class="col-9">{{ $stok->stok_tanggal }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Stok Jumlah :</th>
+                            <th class="text-right col-3">Jumlah Stok :</th>
                             <td class="col-9">{{ $stok->stok_jumlah }}</td>
                         </tr>
                     </table>
@@ -78,7 +77,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                datastok.ajax.reload();
+                                dataStok.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {

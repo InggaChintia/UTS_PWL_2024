@@ -9,7 +9,7 @@
                 <a class="btn btn-primary" href="{{ url('level/create') }}">Tambah</a>
                 <a href="{{ url('/level/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export level</a> 
                 <a href="{{ url('/level/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export level</a> 
-                <button onclick="modalAction('{{ url('/level/create_ajax') }}')" class="btn btn-success">Tambah Ajax</button>
+                <button onclick="modalAction('{{ url('/level/create_ajax') }}')" class="btn btn-success">Tambah (Ajax)</button>
             </div>
         </div>
         <div class="card-body">
@@ -97,9 +97,6 @@
                     searchable: false
                 }]
             });
-            // $('#level_id').on('change',function(){
-            //     dataLevel.ajax.reload();
-            // });
         });
     </script>
 @endpush

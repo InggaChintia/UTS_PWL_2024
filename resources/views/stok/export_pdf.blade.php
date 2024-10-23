@@ -60,21 +60,15 @@
         <tr> 
             {{-- <td width="15%" class="text-center"><img src="{{ asset('polinema-bw.png') }}"></td>  --}}
             <td width="85%"> 
-                <span class="text-center d-block font-11 font-bold mb-1">
-                    KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
-                </span> 
-                <span class="text-center d-block font-13 font-bold mb-1">
-                    POLITEKNIK NEGERI MALANG
-                </span> 
-                <span class="text-center d-block font-10">
-                    Jl. Soekarno-Hatta No. 9 Malang 65141
-                </span> 
-                <span class="text-center d-block font-10">
-                    Telepon (0341) 404424 Pes. 101-105, 0341-404420, Fax. (0341) 404420
-                </span> 
-                <span class="text-center d-block font-10">
-                    Laman: www.polinema.ac.id
-                </span> 
+                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN 
+PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span> 
+                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI 
+MALANG</span> 
+                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang 
+65141</span> 
+                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101
+105, 0341-404420, Fax. (0341) 404420</span> 
+                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span> 
             </td> 
         </tr> 
     </table> 
@@ -88,7 +82,6 @@
                     <th>Nama User</th>
                     <th>Tanggal Stok</th>
                     <th>Jumlah Stok</th>
-                    <th>Aksi</th>
             </tr> 
         </thead> 
         <tbody> 
@@ -103,5 +96,5 @@
             @endforeach 
 </tbody> 
 </table> 
-</body> 
+</body> 
 </html>

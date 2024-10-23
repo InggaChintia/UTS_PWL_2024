@@ -10,7 +10,7 @@
                 <a href="{{ url('/kategori/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export kategori</a> 
                 <a href="{{ url('/kategori/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export kategori</a> 
                 <button onclick="modalAction('{{ url('/kategori/create_ajax') }}')"
-                    class="btn btn-success">Tambah Ajax</button>
+                    class="btn btn-success">Tambah (Ajax)</button>
             </div>
         </div>
         <div class="card-body">
@@ -97,9 +97,9 @@
                     searchable: false
                 }]
             });
-            // $('#kategori_id').on('change',function(){
-            //     dataKategori.ajax.reload();
-            // });
+            $('#kategori_id').on('change',function(){
+                dataKategori.ajax.reload();
+            });
         });
     </script>
 @endpush
