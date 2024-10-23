@@ -3,121 +3,125 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UserModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use App\Models\UserModel;
+use App\Models\LevelModel;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-    // Menampilkan halaman profil
-    public function showProfile()
+    public function index()
     {
-        // Mengambil user yang sedang login dari tabel m_user menggunakan UserModel
-        $user = UserModel::find(Auth::user()->user_id);
-
-        if (!$user) {
-            return redirect()->route('login')->withErrors('Anda harus login terlebih dahulu.');
-        }
-
         $breadcrumb = (object) [
-            'title' => 'Profile',
-            'list' => [
-                'Home',
-                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
-                'Profil'
-            ]
+            'title' => 'Profil',
+            'list' => ['Home', 'Profile']
         ];
 
-        // Mengirimkan 'profile' sebagai nilai $activeMenu
-        return view('profile.profil', compact('user', 'breadcrumb'))->with('activeMenu', 'profile');
-    }
-
-    // Menampilkan halaman edit profil
-    public function edit()
-    {
-        // Mengambil user yang sedang login dari tabel m_user menggunakan UserModel
-        $user = UserModel::find(Auth::user()->user_id);
-
-        $breadcrumb = (object) [
-            'title' => 'Edit Profile',
-            'list' => [
-                (object) ['label' => 'Profile', 'url' => route('profile.edit')],
-                'Edit'
-            ]
+        $page = (object) [
+            'title' => 'Data Profil Pengguna'
         ];
 
-        return view('profile.edit', compact('user', 'breadcrumb'))->with('activeMenu', 'profile');
+        $activeMenu = 'profile'; // Set the active menu
+
+        return view('profile.index', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'activeMenu' => $activeMenu
+        ]);
     }
 
-    // Memperbarui data profil
-    public function update(Request $request)
+    public function update_profile(Request $request)
     {
-        // Mengambil user yang sedang login dari tabel m_user menggunakan UserModel
-        $user = UserModel::find(Auth::user()->user_id);
-
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:m_user,username,' . $user->user_id . ',user_id',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10048',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Validate image file
         ]);
 
-        // Update nama dan username
-        $user->nama = $request->nama;
-        $user->username = $request->username;
+        // Get the logged-in user's ID
+        $userId = Auth::id();
+        $user = UserModel::find($userId);
 
-        // Handle upload avatar
+        // If there's an uploaded image
         if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('uploads/avatars', 'public');
-            $user->avatar = $avatarPath;
+            // Delete old profile picture if it exists
+            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+                Storage::delete('public/' . $user->avatar);
+            }
+
+            // Store new profile picture publicly
+            $path = $request->file('avatar')->store('images/profiles', 'public');
+            $user->avatar = $path; // Save the path to the database
         }
+
+        // Save changes to the database
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile picture updated successfully');
+    }
+
+    public function update_pengguna(Request $request, string $id)
+    {
+        // Validasi input
+        $request->validate([
+            'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id', // username harus unik
+            'nama' => 'required|string|max:100', // nama harus diisi dan maksimal 100 karakter
+        ]);
+
+        // Mengambil pengguna berdasarkan ID
+        $user = UserModel::find($id);
+
+        // Update data pengguna
+        $user->username = $request->username;
+        $user->nama = $request->nama;
 
         // Simpan perubahan
         $user->save();
 
-        return redirect()->route('profile.profil')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Data pengguna berhasil diperbarui');
     }
 
-    // Menampilkan halaman ganti password
-    public function changePassword()
+    public function update_password(Request $request, string $id)
     {
-        $breadcrumb = (object) [
-            'title' => 'Ganti Password',
-            'list' => [
-                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
-                'Ganti Password'
-            ]
-        ];
-
-        return view('profile.password', compact('breadcrumb'))->with('activeMenu', 'profile');
-    }
-
-    // Memperbarui password
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
+        // Custom validation rules
+        $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'new_password' => 'required|string|min:6|confirmed',
+            'new_password' => 'required|min:5', // Password minimal 5 karakter
+            'new_password_confirmation' => 'required|same:new_password', // Verifikasi password harus sama dengan password baru
+        ], [
+            'new_password.min' => 'Password minimal harus 5 karakter', // Pesan kesalahan kustom
+            'new_password_confirmation.same' => 'Verifikasi password yang anda masukkan tidak sesuai dengan password baru', // Pesan kesalahan kustom
         ]);
 
-        // Mengambil user yang sedang login dari tabel m_user menggunakan UserModel
-        $user = UserModel::find(Auth::user()->user_id);
+        // Jika validasi gagal
+        if ($validator->fails()) {
+            // Cek error untuk new_password dan new_password_confirmation
+            if ($validator->errors()->has('new_password')) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->with('error_type', 'new_password'); // Tetap di tab "Ubah Password"
+            }
 
-        // Log untuk debug
-        Log::info('User ID: ' . $user->user_id);
-        Log::info('Current Password: ' . $request->current_password);
-
-        // Cek apakah password lama benar
-        if (!Hash::check($request->current_password, $user->password)) {
-            Log::info('Old password does not match');
-            return back()->withErrors(['current_password' => 'Password lama salah']);
+            if ($validator->errors()->has('new_password_confirmation')) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->with('error_type', 'new_password_confirmation'); // Tetap di tab "Ubah Password"
+            }
         }
 
-        // Update password baru
+        // Ambil user berdasarkan ID
+        $user = UserModel::find($id);
+
+        // Cek apakah password lama cocok
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Password lama tidak sesuai'])
+                ->with('error_type', 'current_password'); // Tetap di tab "Ubah Password"
+        }
+
+        // Jika validasi lolos, ubah password user
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        Log::info('Password updated successfully for User ID: ' . $user->user_id);
-        return redirect()->route('profile.profil')->with('success', 'Password berhasil diubah.');
+        return redirect()->back()->with('success', 'Password berhasil diubah');
     }
 }

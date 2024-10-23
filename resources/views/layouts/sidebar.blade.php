@@ -2,7 +2,7 @@
   {{-- sidebar profile --}}
   <div class="sidebar">
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
+        {{-- <div class="image">
             <img @if (file_exists(public_path(
                         'storage/app/public/uploads/avatars/' .
                             auth()->user()->username .
@@ -11,7 +11,7 @@
                             '_profile.png'))) src="{{ asset('storage/app/public/uploads/avatars/' 
                             . auth()->user()->username . '/' . auth()->user()->username . '_profile.png') }}" @endif
                 class="img-circle elevation-2" alt="User Image">
-        </div>
+        </div> --}}
       <div class="info">
             <a href="{{ url('/profile') }}" class="d-block">{{ auth()->user()->username }}</a>
       </div>

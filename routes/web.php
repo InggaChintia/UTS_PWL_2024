@@ -181,21 +181,11 @@ Route::middleware(['auth'])->group(function() { // semua route di dalam group ha
 });
 
     //PROFILE
-    Route::middleware(['auth'])->group(function () { // semua route di dalam group harus login dulu
-        // Rute untuk menampilkan profil
-        Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
-    
-        // Rute untuk mengedit profil
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    
-        // Rute untuk memperbarui data profil
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    
-        // Rute untuk menampilkan halaman ganti password
-        Route::get('/profile/password/change', [ProfileController::class, 'changePassword'])->name('password.change');
-    
-        // Rute untuk memperbarui password
-        Route::put('/profile/password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'index']);
+        Route::post('/profile/update_profile', [ProfileController::class, 'update_profile']);
+        Route::put('/profile/update_pengguna/{id}', [ProfileController::class, 'update_pengguna']);
+        Route::put('/profile/update_password/{id}', [ProfileController::class, 'update_password']);
     });
     
     
