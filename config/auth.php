@@ -41,7 +41,11 @@ return [
             'provider' => 'users',
         ],
         'api' => [
+<<<<<<< HEAD
             'driver' => 'jwt',
+=======
+            'drive' => 'jwt',
+>>>>>>> 2be339ca4496bb9479a5cd69ade0495f9212ecac
             'provider' => 'users',
         ],
     ],
